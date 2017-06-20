@@ -1,0 +1,16 @@
+Para la realizacion del proyecto "Taxodium" fue necesario los siguientes insumos
+
+	-Ecuaciones_VRTAcc.xlsx	(contiene los insumos de comparacon con lo que trabaja "Taxodium")
+	-Especies APG por conglomerado.xlsx (contiene las distintas especies registradas por conglomerado)
+	-Remuestreo_V24_UME.dbf (contiene informacion geoespacial de los conglomerados como clave_UMAFOR y Ecorregiones)
+	-IdentidadTaxonomicaPorConglomer (es el resultado de hacer el cruce entre "Especies APG por conglomerado.xlsx" y "Remuestreo_V24_UME.dbf" haciendolos coincidir en los campos referentes al conglomerado)
+
+Rutina de ejecucion de Taxodium
+
+	1-ejecutar script "JOIN ESPECIES_MALLA.sql" para crear el archivo "IdentidadTaxonomicaPorConglomer"
+	2-ejecutar script "Crea_ecuacionesVRTA.sql" o exportar csv de la verison mas reciente que se tenga de "Ecuaciones_VRTAcc"
+	3-Una ves que se cuentec con la tabla de "Ecuaciones_VRTAcc", correr el script "Limpiar_ecuaciones_vrt.sql", para eliminar palabras "NULL" y espacios a la derecha e izquierda de las celdas de Ecuaciones_VRTAcc
+	4-correr el script "CreateFunction nuevosNULLS.sql", el cual crea el esqueleto de Taxodium, y contiene todas las prioridades y el script necesario para tomar desiciones
+	5-correr el script "Limpiar_IdentidadTaxonomicaPorConglomer.sql" el cual elimina palabras "NULL" y espacios a la derecha e izquierda de las celdas de "IdentidadTaxonomicaPorConglomer"
+	6-correr por ultimo el script "SelectArbol.sql" el cual contiene la llamada hacia "IdentidadTaxonomicaPorConglomer" y "Ecuaciones_VRTAcc" para asignar una ecuacion.
+	7- guarde el archivo resultante como un CSV en la ruta que desee
