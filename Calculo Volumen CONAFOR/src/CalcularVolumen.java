@@ -1385,7 +1385,7 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 	public double calculoVolumen(String CVE_ECUACION, double DN_EC, double AT_EC) {
 		double res = 0;
 		switch (CVE_ECUACION) {
-		case "Coef._Morf_0.3":
+		case "Coef_Morf_03":
 			res = 0.7854 * Math.pow(DN_EC / 100, 2) * AT_EC * 0.3;
 			break;
 		case "Oyamelz2y3_Ver":
