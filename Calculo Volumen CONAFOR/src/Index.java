@@ -12,6 +12,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFormattedTextField;
 
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -36,6 +37,9 @@ public class Index extends JFrame {
 	public JButton btnCargar;
 	private JLabel lblNumeroDeRegistros;
 	private JLabel lblCalculoDeVolumen;
+	private JFormattedTextField txtDentroRango;
+	private JFormattedTextField txtFueraRango;
+	private JFormattedTextField txtSinRango;
 
 	/**
 	 * Launch the application.
@@ -90,12 +94,12 @@ public class Index extends JFrame {
 		});
 
 		btnCalcular = new JButton("Calcular");
-		btnCalcular.setBounds(282, 234, 148, 44);
-		btnCalcular.setEnabled(true);
+		btnCalcular.setBounds(278, 176, 148, 44);
+		btnCalcular.setEnabled(false);
 		btnCalcular.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					CalcularVolumen volumen = new CalcularVolumen(progressBar, ruta, btnCalcular, btnCargar,lblNumeroDeRegistros);
+					CalcularVolumen volumen = new CalcularVolumen(progressBar, ruta, btnCalcular, btnCargar,lblNumeroDeRegistros,txtDentroRango,txtFueraRango,txtSinRango);
 					btnCargar.setEnabled(false);
 					btnCalcular.setEnabled(false);
 					volumen.execute();
@@ -121,7 +125,7 @@ public class Index extends JFrame {
 		
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(Index.class.getResource("/image/image_index.png")));
-		lblNewLabel.setBounds(new Rectangle(87, 176, 137, 137));
+		lblNewLabel.setBounds(new Rectangle(54, 176, 137, 137));
 		panel.add(lblNewLabel);
 		panel.add(lblNumeroDeRegistros);
 		panel.add(btnCalcular);
@@ -129,6 +133,33 @@ public class Index extends JFrame {
 		panel.add(btnCargar);
 		panel.add(textField);
 		panel.add(lblCalculoDeVolumen);
+		
+		txtDentroRango = new JFormattedTextField();
+		txtDentroRango.setBounds(354, 246, 80, 20);
+		panel.add(txtDentroRango);
+		txtDentroRango.setColumns(10);
+		
+		txtFueraRango = new JFormattedTextField();
+		txtFueraRango.setColumns(10);
+		txtFueraRango.setBounds(354, 278, 80, 20);
+		panel.add(txtFueraRango);
+		
+		txtSinRango = new JFormattedTextField();
+		txtSinRango.setColumns(10);
+		txtSinRango.setBounds(354, 310, 80, 20);
+		panel.add(txtSinRango);
+		
+		JLabel lblFormulaConRangos = new JLabel("Registros dentro de rango");
+		lblFormulaConRangos.setBounds(203, 248, 148, 16);
+		panel.add(lblFormulaConRangos);
+		
+		JLabel lblRegistrosFueraDe = new JLabel("Registros fuera de rango");
+		lblRegistrosFueraDe.setBounds(203, 280, 148, 16);
+		panel.add(lblRegistrosFueraDe);
+		
+		JLabel lblRegistrosSinRango = new JLabel("Registros sin rango");
+		lblRegistrosSinRango.setBounds(203, 314, 148, 16);
+		panel.add(lblRegistrosSinRango);
 	}
 
 	public void cargarArchivoEntrada() {

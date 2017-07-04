@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
+import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 import javax.swing.plaf.SliderUI;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter.DEFAULT;
@@ -21,20 +22,26 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter.DEFAULT;
 public class CalcularVolumen extends SwingWorker<Integer, String> {
 	public JProgressBar barraProgreso;
 	public JButton btnCalcular, btnCargar;
+	public JTextField txtDentroRango;
+	public JTextField txtFueraRango;
+	public JTextField txtSinRango;
 	public JLabel numeroRegistros;
 	public String ruta;
 	public double Rango_AT_Est_CMAX, Rango_AT_Est_CMIN, Rango_DN_Est_CMAX, Rango_DN_Est_CMIN;
 	public double RESULTADO = 0;
-	public int iteradorFueraRangos=0,iteradorDentroRangos=0,iteradorNoFormulaRango=0;
-	boolean	resultado = false;
+	public int iteradorFueraRangos = 0, iteradorDentroRangos = 0, iteradorNoFormulaRango = 0;
+	
+	boolean resultado = false;
 
-	public CalcularVolumen(JProgressBar barraProgreso, String ruta, JButton btnCalcular, JButton btnCargar,
-			JLabel numeroRegistros) {
+	public CalcularVolumen(JProgressBar barraProgreso, String ruta, JButton btnCalcular, JButton btnCargar, JLabel numeroRegistros,JTextField txtDentroRango,JTextField txtFueraRango,JTextField txtSinRango) {
 		super();
 		this.btnCalcular = btnCalcular;
 		this.btnCargar = btnCargar;
 		this.barraProgreso = barraProgreso;
 		this.numeroRegistros = numeroRegistros;
+		this.txtDentroRango=txtDentroRango;
+		this.txtFueraRango=txtFueraRango;
+		this.txtSinRango=txtSinRango;
 		this.ruta = ruta;
 	}
 
@@ -50,7 +57,7 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 
 	public void recoleccionDatos(String ruta) {
 		int i = 0;
-		double AT_Est_C=0,DN_Est_C=0;
+		double AT_Est_C = 0, DN_Est_C = 0;
 		DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd");
 		Calendar cal = Calendar.getInstance();
 		// System.out.println(dateFormat.format(cal)); //2016/11/16 12:08:43
@@ -58,7 +65,7 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 		String rutaArchivo = ruta;
 		String Conglomerado, cgl_sit_arb, Anio, IdEstado, Estado, Formato, Sitio, Registro, Arbol, Familia_APG,
 				Genero_APG, Especie_APG, Categoria_Infra_APG, Infra_APG, Condicion, Forma_Biologica_1,
-				NombreCientifico_APG, CVE_ECUACION, Prioridad_Arbol;
+				NombreCientifico_APG, CVE_ECUACION, Prioridad_Arbol,Nivel = null;
 
 		// String numeros = "1,2,3,4,5,6";sustituir por tabop
 		try {
@@ -76,7 +83,7 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 			BufferedWriter bw = new BufferedWriter(w);
 			PrintWriter wr = new PrintWriter(bw);
 			wr.write(
-					"Conglomerado,cgl_sit_arb,Anio,IdEstado,Estado,Formato,Sitio,Registro,Arbol,Familia_APG,Genero_APG,Especie_APG,Categoria_Infra_APG,Infra_APG,Condicion,Forma_Biologica_1,NombreCientifico_APG,AT_Est_C,DN_Est_C,CVE_ECUACION,Prioridad_Arbol,VolumenVRTA:m3\n");// escribimos
+					"Conglomerado,cgl_sit_arb,Anio,IdEstado,Estado,Formato,Sitio,Registro,Arbol,Familia_APG,Genero_APG,Especie_APG,Categoria_Infra_APG,Infra_APG,Condicion,Forma_Biologica_1,NombreCientifico_APG,AT_Est_C,DN_Est_C,CVE_ECUACION,Prioridad_Arbol,Nivel,VolumenVRTA:m3\n");// escribimos
 			// en
 			// el
 			// archivo
@@ -111,7 +118,7 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 					CVE_ECUACION = tokensaux.nextToken();
 					Prioridad_Arbol = tokensaux.nextToken();
 					/* REVISAR SI ES UNA ECUACION CON RANGOS */
-				
+
 					switch (CVE_ECUACION) {
 					case "Oyamelz2y3_Ver":/* Especial */
 						resultado = true;
@@ -155,6 +162,70 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 						Rango_DN_Est_CMAX = 132.5;
 						Rango_DN_Est_CMIN = 7.5;
 						break;
+					case "T6z4_Gro":/* Especial */
+						resultado = true;
+						Rango_DN_Est_CMIN = 12.5;
+						Rango_DN_Est_CMAX = 132.5;
+						Rango_AT_Est_CMIN = 7.5;
+						Rango_AT_Est_CMAX = 47.5;
+						break;
+					case "T9z5_Gro":/* Especial */
+						resultado = true;
+						Rango_DN_Est_CMIN = 12.5;
+						Rango_DN_Est_CMAX = 132.5;
+						Rango_AT_Est_CMIN = 7.5;
+						Rango_AT_Est_CMAX = 47.5;
+						break;
+					case "T12_Gro":/* Especial */
+						resultado = true;
+						Rango_DN_Est_CMIN = 12.5;
+						Rango_DN_Est_CMAX = 132.5;
+						Rango_AT_Est_CMIN = 7.5;
+						Rango_AT_Est_CMAX = 47.5;
+						break;
+					case "T10z5_Gro":/* Especial */
+						resultado = true;
+						Rango_DN_Est_CMIN = 12.5;
+						Rango_DN_Est_CMAX = 132.5;
+						Rango_AT_Est_CMIN = 7.5;
+						Rango_AT_Est_CMAX = 47.5;
+						break;
+					case "T3z2_Gro":/* Especial */
+						resultado = true;
+						Rango_DN_Est_CMIN = 12.5;
+						Rango_DN_Est_CMAX = 132.5;
+						Rango_AT_Est_CMIN = 7.5;
+						Rango_AT_Est_CMAX = 47.5;
+						break;
+					case "T2z2_Gro":/* Especial */
+						resultado = true;
+						Rango_DN_Est_CMIN = 12.5;
+						Rango_DN_Est_CMAX = 132.5;
+						Rango_AT_Est_CMIN = 7.5;
+						Rango_AT_Est_CMAX = 47.5;
+						break;
+					case "T4z3_Gro":/* Especial */
+						resultado = true;
+						Rango_DN_Est_CMIN = 12.5;
+						Rango_DN_Est_CMAX = 132.5;
+						Rango_AT_Est_CMIN = 7.5;
+						Rango_AT_Est_CMAX = 47.5;
+						break;
+					case "T5z3_Gro":/* Especial */
+						resultado = true;
+						Rango_DN_Est_CMIN = 12.5;
+						Rango_DN_Est_CMAX = 132.5;
+						Rango_AT_Est_CMIN = 7.5;
+						Rango_AT_Est_CMAX = 47.5;
+						break;
+					case "T1z1_Gro":/* Especial */
+						resultado = true;
+						Rango_DN_Est_CMIN = 12.5;
+						Rango_DN_Est_CMAX = 132.5;
+						Rango_AT_Est_CMIN = 7.5;
+						Rango_AT_Est_CMAX = 47.5;
+						break;
+
 					case "T10_Chis":/* Especial */
 						resultado = true;
 						Rango_AT_Est_CMAX = 47.5;
@@ -940,14 +1011,14 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 						Rango_DN_Est_CMIN = 7.5;
 						break;
 					case "TIV_Oax":/* Especial */
-						//System.out.println("\t\t\t\tespecial");
+						// System.out.println("\t\t\t\tespecial");
 						resultado = true;
 						Rango_AT_Est_CMAX = 47.5;
 						Rango_AT_Est_CMIN = 2.5;
 						Rango_DN_Est_CMAX = 132.5;
 						Rango_DN_Est_CMIN = 7.5;
 						break;
-						
+
 					case "TIV_Tab":/* Especial */
 						resultado = true;
 						Rango_AT_Est_CMAX = 47.5;
@@ -1270,60 +1341,6 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 						Rango_DN_Est_CMAX = 132.5;
 						Rango_DN_Est_CMIN = 7.5;
 						break;
-
-					case "T6z4_Gro": /* Especial */
-						Rango_AT_Est_CMIN=7.5;
-						Rango_AT_Est_CMAX=47.5;
-						Rango_DN_Est_CMAX=12.5;
-						Rango_DN_Est_CMIN=132.5;
-					case "T9z5_Gro": /* Especial */
-						resultado=true;
-						Rango_AT_Est_CMIN=7.5;
-						Rango_AT_Est_CMAX=47.5;
-						Rango_DN_Est_CMAX=12.5;
-						Rango_DN_Est_CMIN=132.5;
-					case "T12_Gro": /* Especial */
-						resultado=true;
-						Rango_AT_Est_CMIN=7.5;
-						Rango_AT_Est_CMAX=47.5;
-						Rango_DN_Est_CMAX=12.5;
-						Rango_DN_Est_CMIN=132.5;
-					case "T10z5_Gro": /* Especial */
-						resultado=true;
-						Rango_AT_Est_CMIN=7.5;
-						Rango_AT_Est_CMAX=47.5;
-						Rango_DN_Est_CMAX=12.5;
-						Rango_DN_Est_CMIN=132.5;
-					case "T3z2_Gro": /* Especial */
-						resultado=true;
-						Rango_AT_Est_CMIN=7.5;
-						Rango_AT_Est_CMAX=47.5;
-						Rango_DN_Est_CMAX=12.5;
-						Rango_DN_Est_CMIN=132.5;
-					case "T2z2_Gro": /* Especial */
-						resultado=true;
-						Rango_AT_Est_CMIN=7.5;
-						Rango_AT_Est_CMAX=47.5;
-						Rango_DN_Est_CMAX=12.5;
-						Rango_DN_Est_CMIN=132.5;
-					case "T4z3_Gro": /* Especial */
-						resultado=true;
-						Rango_AT_Est_CMIN=7.5;
-						Rango_AT_Est_CMAX=47.5;
-						Rango_DN_Est_CMAX=12.5;
-						Rango_DN_Est_CMIN=132.5;
-					case "T5z3_Gro": /* Especial */
-						resultado=true;
-						Rango_AT_Est_CMIN=7.5;
-						Rango_AT_Est_CMAX=47.5;
-						Rango_DN_Est_CMAX=12.5;
-						Rango_DN_Est_CMIN=132.5;
-					case "T1z1_Gro": /* Especial */
-						resultado=true;
-						Rango_AT_Est_CMIN=7.5;
-						Rango_AT_Est_CMAX=47.5;
-						Rango_DN_Est_CMAX=12.5;
-						Rango_DN_Est_CMIN=132.5;
 						
 					default:
 							resultado = false;
@@ -1347,12 +1364,60 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 						RESULTADO = calculoVolumen(CVE_ECUACION, DN_Est_C, AT_Est_C);
 					}
 
-					
+					if (Integer.parseInt(Prioridad_Arbol) >= 1 && Integer.parseInt(Prioridad_Arbol) <= 4) {
+						Nivel = "1";
+					}
+
+					if (Integer.parseInt(Prioridad_Arbol) >= 5 && Integer.parseInt(Prioridad_Arbol) <= 12) {
+						Nivel = "2";
+					}
+
+					if (Integer.parseInt(Prioridad_Arbol) >= 13 && Integer.parseInt(Prioridad_Arbol) <= 16) {
+						Nivel = "3";
+					}
+
+					if (Integer.parseInt(Prioridad_Arbol) >= 17 && Integer.parseInt(Prioridad_Arbol) <= 24) {
+						Nivel = "4";
+					}
+
+					if (Integer.parseInt(Prioridad_Arbol) >= 25 && Integer.parseInt(Prioridad_Arbol) <= 28) {
+						Nivel = "5";
+					}
+
+					if (Integer.parseInt(Prioridad_Arbol) >= 29 && Integer.parseInt(Prioridad_Arbol) <= 36) {
+						Nivel = "6";
+					}
+
+					if (Integer.parseInt(Prioridad_Arbol) >= 37 && Integer.parseInt(Prioridad_Arbol) <= 39) {
+						Nivel = "7";
+					}
+
+					if (Integer.parseInt(Prioridad_Arbol) >= 40 && Integer.parseInt(Prioridad_Arbol) <= 47) {
+						Nivel = "8";
+					}
+
+					if (Integer.parseInt(Prioridad_Arbol) >= 48 && Integer.parseInt(Prioridad_Arbol) <= 50) {
+						Nivel = "9";
+					}
+
+					if (Integer.parseInt(Prioridad_Arbol) >= 51 && Integer.parseInt(Prioridad_Arbol) <= 58) {
+						Nivel = "10";
+					}
+
+					if (Integer.parseInt(Prioridad_Arbol) == 59) {
+						Nivel = "11";
+					}
+
+					if (Integer.parseInt(Prioridad_Arbol) == 60) {
+						Nivel = "12";
+					}
+						
+
 					wr.append(Conglomerado + "," + cgl_sit_arb + "," + Anio + "," + IdEstado + "," + Estado + ","
 							+ Formato + "," + Sitio + "," + Registro + "," + Arbol + "," + Familia_APG + ","
 							+ Genero_APG + "," + Especie_APG + "," + Categoria_Infra_APG + "," + Infra_APG + ","
 							+ Condicion + "," + Forma_Biologica_1 + "," + NombreCientifico_APG + "," + AT_Est_C + ","
-							+ DN_Est_C + "," + CVE_ECUACION + "," + Prioridad_Arbol + "," + RESULTADO + "\n");
+							+ DN_Est_C + "," + CVE_ECUACION + "," + Prioridad_Arbol+ "," +Nivel + "," + RESULTADO + "\n");
 					
 					Rango_AT_Est_CMAX = 0;
 					Rango_AT_Est_CMIN = 0;
@@ -1366,9 +1431,9 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 				// Cerramos el archivo
 
 			}
-			System.out.println("Registros con Formula Dentro Rangos="+iteradorDentroRangos);
-			System.out.println("Registros con Formula Fuera Rangos="+iteradorFueraRangos);
-			System.out.println("Registros No Formula Rango="+iteradorNoFormulaRango);
+			txtDentroRango.setText(Integer.toString(iteradorDentroRangos));
+			txtFueraRango.setText(Integer.toString(iteradorFueraRangos));
+			txtSinRango.setText(Integer.toString(iteradorNoFormulaRango));
 			wr.close();
 			bw.close();
 			buffer.close();
@@ -4656,10 +4721,34 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 			res = Math.exp(-9.40152632 + 1.71919595 * Math.log(DN_EC) + 1.07447205 * Math.log(AT_EC));
 			break;
 		default:
-			res=0.000000000000000000000000000000000000009;
+			res=0.00000000000000000000000000000000000000000000000000000000000000000000000000000000009;
 			break;
 		}
 		return res;
+	}
+	
+	public int getIteradorFueraRangos() {
+		return iteradorFueraRangos;
+	}
+
+	public void setIteradorFueraRangos(int iteradorFueraRangos) {
+		this.iteradorFueraRangos = iteradorFueraRangos;
+	}
+
+	public int getIteradorDentroRangos() {
+		return iteradorDentroRangos;
+	}
+
+	public void setIteradorDentroRangos(int iteradorDentroRangos) {
+		this.iteradorDentroRangos = iteradorDentroRangos;
+	}
+
+	public int getIteradorNoFormulaRango() {
+		return iteradorNoFormulaRango;
+	}
+
+	public void setIteradorNoFormulaRango(int iteradorNoFormulaRango) {
+		this.iteradorNoFormulaRango = iteradorNoFormulaRango;
 	}
 
 }
