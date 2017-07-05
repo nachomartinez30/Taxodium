@@ -1353,6 +1353,7 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 						} else {
 							RESULTADO = 0.7854 * Math.pow(DN_Est_C / 100, 2) * AT_Est_C * 0.3;
 							CVE_ECUACION = "Coef_Morf_03";
+							ecuacion="0.7854 * POTENCIA(DN_Est_C / 100, 2) * AT_Est_C * 0.3";
 							Prioridad_Arbol="60";
 							iteradorFueraRangos++;
 						}
