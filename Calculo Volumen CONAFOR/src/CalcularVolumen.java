@@ -68,7 +68,7 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 		String rutaArchivo = ruta;
 		String Conglomerado, cgl_sit_arb, Anio, IdEstado, Estado, Formato, Sitio, Registro, Arbol, Familia_APG,
 				Genero_APG, Especie_APG, Categoria_Infra_APG, Infra_APG, Condicion, Forma_Biologica_1,
-				NombreCientifico_APG, CVE_ECUACION, Prioridad_Arbol, Nivel = null,fuente;
+				NombreCientifico_APG, CVE_ECUACION, Prioridad_Arbol, Nivel = null, fuente;
 
 		// String numeros = "1,2,3,4,5,6";sustituir por tabop
 		try {
@@ -88,39 +88,33 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 			wr.write(
 					"Conglomerado,cgl_sit_arb,Anio,IdEstado,Estado,Formato,Sitio,Registro,Arbol,Familia_APG,Genero_APG,Especie_APG,Categoria_Infra_APG,Infra_APG,Condicion,Forma_Biologica_1,NombreCientifico_APG,AT_Est_C,DN_Est_C,CVE_ECUACION,ecuacion,Rango_DN_Est_CMIN_String,Rango_DN_Est_CMAX_String,Rango_AT_Est_CMIN_String,Rango_AT_Est_CMAX_String,fuente,Prioridad_Arbol,Nivel,VolumenVRTA:m3\n");// escribimos
 
-			
-			
 			while ((linea = buffer.readLine()) != null) {
 				i++;
 				StringTokenizer tokensaux = new StringTokenizer(linea, ",");
-				System.out.println(linea);
-				if(linea.matches("[﻿a-zA-Z_,]+")){
-					System.out.println("trae cabeceras");
-				}
 				while (tokensaux.hasMoreTokens()) {
 
-					Conglomerado=tokensaux.nextToken();
-					cgl_sit_arb=tokensaux.nextToken();
-					Anio=tokensaux.nextToken();
-					IdEstado=tokensaux.nextToken();
-					Estado=tokensaux.nextToken();
-					Formato=tokensaux.nextToken();
-					Sitio=tokensaux.nextToken();
-					Registro=tokensaux.nextToken();
-					Arbol=tokensaux.nextToken();
-					Familia_APG=tokensaux.nextToken();
-					Genero_APG=tokensaux.nextToken();
-					Especie_APG=tokensaux.nextToken();
-					Categoria_Infra_APG=tokensaux.nextToken();
-					Infra_APG=tokensaux.nextToken();
-					Condicion=tokensaux.nextToken();
-					Forma_Biologica_1=tokensaux.nextToken();
-					NombreCientifico_APG=tokensaux.nextToken();
-					AT_Est_C=Double.parseDouble(tokensaux.nextToken());
-					DN_Est_C=Double.parseDouble(tokensaux.nextToken());
-					CVE_ECUACION=tokensaux.nextToken();
-					Prioridad_Arbol=tokensaux.nextToken();
-					fuente=tokensaux.nextToken();
+					Conglomerado = tokensaux.nextToken();
+					cgl_sit_arb = tokensaux.nextToken();
+					Anio = tokensaux.nextToken();
+					IdEstado = tokensaux.nextToken();
+					Estado = tokensaux.nextToken();
+					Formato = tokensaux.nextToken();
+					Sitio = tokensaux.nextToken();
+					Registro = tokensaux.nextToken();
+					Arbol = tokensaux.nextToken();
+					Familia_APG = tokensaux.nextToken();
+					Genero_APG = tokensaux.nextToken();
+					Especie_APG = tokensaux.nextToken();
+					Categoria_Infra_APG = tokensaux.nextToken();
+					Infra_APG = tokensaux.nextToken();
+					Condicion = tokensaux.nextToken();
+					Forma_Biologica_1 = tokensaux.nextToken();
+					NombreCientifico_APG = tokensaux.nextToken();
+					AT_Est_C = Double.parseDouble(tokensaux.nextToken());
+					DN_Est_C = Double.parseDouble(tokensaux.nextToken());
+					CVE_ECUACION = tokensaux.nextToken();
+					Prioridad_Arbol = tokensaux.nextToken();
+					fuente = tokensaux.nextToken();
 					/* REVISAR SI ES UNA ECUACION CON RANGOS */
 
 					switch (CVE_ECUACION) {
@@ -1015,7 +1009,6 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 						Rango_DN_Est_CMIN = 7.5;
 						break;
 					case "TIV_Oax":/* Especial */
-						// System.out.println("\t\t\t\tespecial");
 						resultado = true;
 						Rango_AT_Est_CMAX = 47.5;
 						Rango_AT_Est_CMIN = 2.5;
