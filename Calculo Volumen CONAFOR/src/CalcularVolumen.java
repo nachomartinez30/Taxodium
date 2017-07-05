@@ -117,7 +117,7 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 					fuente = tokensaux.nextToken();
 					/* REVISAR SI ES UNA ECUACION CON RANGOS */
 
-					switch (CVE_ECUACION) {
+				switch (CVE_ECUACION) {
 					case "Oyamelz2y3_Ver":/* Especial */
 						resultado = true;
 						Rango_AT_Est_CMAX = 47.5;
@@ -1353,7 +1353,6 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 						} else {
 							RESULTADO = 0.7854 * Math.pow(DN_Est_C / 100, 2) * AT_Est_C * 0.3;
 							CVE_ECUACION = "Coef_Morf_03";
-							ecuacion="0.7854 * POTENCIA(DN_Est_C / 100, 2) * AT_Est_C * 0.3";
 							Prioridad_Arbol="60";
 							iteradorFueraRangos++;
 						}
@@ -1431,7 +1430,7 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 						Rango_DN_Est_CMIN_String = Double.toString(Rango_DN_Est_CMIN);
 					}
 
-					getEcuacion(CVE_ECUACION);
+					ecuacion=getEcuacion(CVE_ECUACION);
 
 					wr.append(Conglomerado + "," + cgl_sit_arb + "," + Anio + "," + IdEstado + "," + Estado + ","
 							+ Formato + "," + Sitio + "," + Registro + "," + Arbol + "," + Familia_APG + ","
@@ -4749,7 +4748,7 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 		return res;
 	}
 
-	public void getEcuacion(String CVE_ECUACION) {
+	public String getEcuacion(String CVE_ECUACION) {
 		ecuacion = "0";
 		switch (CVE_ECUACION) {
 		case "Coef_Morf_03":
@@ -5372,7 +5371,6 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 			break;
 		case "T11_Gro":
 			ecuacion = " 0.23104 - 2.32118 * DN_EC / 100 - 0.02378 * AT_EC + 7.475 * POTENCIA(DN_EC / 100; 2)+ 0.18215 * AT_EC * DN_EC / 100";
-
 			break;
 		case "T11_Mex":
 			ecuacion = " EXP(-1.586189 + 1.708726 * LN(DN_EC / 100) + 1.094269 * LN(AT_EC))";
@@ -8026,6 +8024,7 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 			ecuacion = " 0.00000000000000000000000000000000000000000000000000000000000000000000000000000000009";
 			break;
 		}
+		return ecuacion;
 	}
 
 	public int getIteradorFueraRangos() {
