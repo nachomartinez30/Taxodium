@@ -28,8 +28,8 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 	public JLabel numeroRegistros;
 	public String ruta, ecuacion = null;
 	public double Rango_AT_Est_CMAX, Rango_AT_Est_CMIN, Rango_DN_Est_CMAX, Rango_DN_Est_CMIN;
-	public String Rango_AT_Est_CMAX_String, Rango_AT_Est_CMIN_String, Rango_DN_Est_CMAX_String,
-			Rango_DN_Est_CMIN_String;
+	// public String Rango_AT_Est_CMAX_String, Rango_AT_Est_CMIN_String,
+	// Rango_DN_Est_CMAX_String,Rango_DN_Est_CMIN_String;
 	public double RESULTADO = 0;
 	public int iteradorFueraRangos = 0, iteradorDentroRangos = 0, iteradorNoFormulaRango = 0;
 
@@ -59,7 +59,7 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 	}
 
 	public void recoleccionDatos(String ruta) {
-		int i = 0;
+		int i = 0,registros=0;
 		double AT_Est_C = 0, DN_Est_C = 0;
 		DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd");
 		Calendar cal = Calendar.getInstance();
@@ -68,7 +68,7 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 		String rutaArchivo = ruta;
 		String Conglomerado, cgl_sit_arb, Anio, IdEstado, Estado, Formato, Sitio, Registro, Arbol, Familia_APG,
 				Genero_APG, Especie_APG, Categoria_Infra_APG, Infra_APG, Condicion, Forma_Biologica_1,
-				NombreCientifico_APG, CVE_ECUACION, Prioridad_Arbol, Nivel = null, fuente;
+				NombreCientifico_APG, CVE_ECUACION, Prioridad_Arbol, Nivel = null, fuente, Rango_Alt, Rango_Diam;
 
 		// String numeros = "1,2,3,4,5,6";sustituir por tabop
 		try {
@@ -79,1377 +79,1369 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 
 			// archivo de escritura
 			File f;
-			f = new File(System.getProperty("user.home") + "\\Desktop\\ResultadoVolumenes_"
-					+ "2017"/* dateFormat.format(cal).toString() */
-					+ ".csv");
+			f = new File(System.getProperty("user.home") + "\\Desktop\\ResultadoVolumenes_" + "2017" + ".csv");
 			FileWriter w = new FileWriter(f);
 			BufferedWriter bw = new BufferedWriter(w);
 			PrintWriter wr = new PrintWriter(bw);
 			wr.write(
-					"Conglomerado,cgl_sit_arb,Anio,IdEstado,Estado,Formato,Sitio,Registro,Arbol,Familia_APG,Genero_APG,Especie_APG,Categoria_Infra_APG,Infra_APG,Condicion,Forma_Biologica_1,NombreCientifico_APG,AT_Est_C,DN_Est_C,CVE_ECUACION,ecuacion,Rango_DN_Est_CMIN_String,Rango_DN_Est_CMAX_String,Rango_AT_Est_CMIN_String,Rango_AT_Est_CMAX_String,fuente,Prioridad_Arbol,Nivel,VolumenVRTA:m3\n");// escribimos
+					"Conglomerado,cgl_sit_arb,Anio,IdEstado,Estado,Formato,Sitio,Registro,Arbol,Familia_APG,Genero_APG,Especie_APG,Categoria_Infra_APG,Infra_APG,Condicion,Forma_Biologica_1,NombreCientifico_APG,AT_Est_C,DN_Est_C,CVE_ECUACION,Ecuacion,Fuente,Rango_Alt,Rango_Diam,Prioridad_Arbol,Nivel,VolumenVRTA:m3\n");// escribimos
 
 			while ((linea = buffer.readLine()) != null) {
 				i++;
-				StringTokenizer tokensaux = new StringTokenizer(linea, ",");
-				while (tokensaux.hasMoreTokens()) {
+				if (i == 1) {
+					System.out.println(linea);
+				} else {
+					registros++;
+					StringTokenizer tokensaux = new StringTokenizer(linea, ",");
+					while (tokensaux.hasMoreTokens()) {
 
-					Conglomerado = tokensaux.nextToken();
-					cgl_sit_arb = tokensaux.nextToken();
-					Anio = tokensaux.nextToken();
-					IdEstado = tokensaux.nextToken();
-					Estado = tokensaux.nextToken();
-					Formato = tokensaux.nextToken();
-					Sitio = tokensaux.nextToken();
-					Registro = tokensaux.nextToken();
-					Arbol = tokensaux.nextToken();
-					Familia_APG = tokensaux.nextToken();
-					Genero_APG = tokensaux.nextToken();
-					Especie_APG = tokensaux.nextToken();
-					Categoria_Infra_APG = tokensaux.nextToken();
-					Infra_APG = tokensaux.nextToken();
-					Condicion = tokensaux.nextToken();
-					Forma_Biologica_1 = tokensaux.nextToken();
-					NombreCientifico_APG = tokensaux.nextToken();
-					AT_Est_C = Double.parseDouble(tokensaux.nextToken());
-					DN_Est_C = Double.parseDouble(tokensaux.nextToken());
-					CVE_ECUACION = tokensaux.nextToken();
-					Prioridad_Arbol = tokensaux.nextToken();
-					fuente = tokensaux.nextToken();
-					/* REVISAR SI ES UNA ECUACION CON RANGOS */
+						Conglomerado = tokensaux.nextToken();
+						cgl_sit_arb = tokensaux.nextToken();
+						Anio = tokensaux.nextToken();
+						IdEstado = tokensaux.nextToken();
+						Estado = tokensaux.nextToken();
+						Formato = tokensaux.nextToken();
+						Sitio = tokensaux.nextToken();
+						Registro = tokensaux.nextToken();
+						Arbol = tokensaux.nextToken();
+						Familia_APG = tokensaux.nextToken();
+						Genero_APG = tokensaux.nextToken();
+						Especie_APG = tokensaux.nextToken();
+						Categoria_Infra_APG = tokensaux.nextToken();
+						Infra_APG = tokensaux.nextToken();
+						Condicion = tokensaux.nextToken();
+						Forma_Biologica_1 = tokensaux.nextToken();
+						NombreCientifico_APG = tokensaux.nextToken();
+						AT_Est_C = Double.parseDouble(tokensaux.nextToken());
+						DN_Est_C = Double.parseDouble(tokensaux.nextToken());
+						CVE_ECUACION = tokensaux.nextToken();
+						fuente = tokensaux.nextToken();
+						Rango_Alt = tokensaux.nextToken();
+						Rango_Diam = tokensaux.nextToken();
+						Prioridad_Arbol = tokensaux.nextToken();
+						/* REVISAR SI ES UNA ECUACION CON RANGOS */
 
-				switch (CVE_ECUACION) {
-					case "Oyamelz2y3_Ver":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 97.5;
-						Rango_DN_Est_CMIN = 12.5;
-						break;
-					case "Pinoz2y3_Ver":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 97.5;
-						Rango_DN_Est_CMIN = 12.5;
-						break;
-					case "T0z1_Pue":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T0z1_SLP":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T0z3_Hgo":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T1_Chis":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T6z4_Gro":/* Especial */
-						resultado = true;
-						Rango_DN_Est_CMIN = 12.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_AT_Est_CMIN = 7.5;
-						Rango_AT_Est_CMAX = 47.5;
-						break;
-					case "T9z5_Gro":/* Especial */
-						resultado = true;
-						Rango_DN_Est_CMIN = 12.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_AT_Est_CMIN = 7.5;
-						Rango_AT_Est_CMAX = 47.5;
-						break;
-					case "T12_Gro":/* Especial */
-						resultado = true;
-						Rango_DN_Est_CMIN = 12.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_AT_Est_CMIN = 7.5;
-						Rango_AT_Est_CMAX = 47.5;
-						break;
-					case "T10z5_Gro":/* Especial */
-						resultado = true;
-						Rango_DN_Est_CMIN = 12.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_AT_Est_CMIN = 7.5;
-						Rango_AT_Est_CMAX = 47.5;
-						break;
-					case "T3z2_Gro":/* Especial */
-						resultado = true;
-						Rango_DN_Est_CMIN = 12.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_AT_Est_CMIN = 7.5;
-						Rango_AT_Est_CMAX = 47.5;
-						break;
-					case "T2z2_Gro":/* Especial */
-						resultado = true;
-						Rango_DN_Est_CMIN = 12.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_AT_Est_CMIN = 7.5;
-						Rango_AT_Est_CMAX = 47.5;
-						break;
-					case "T4z3_Gro":/* Especial */
-						resultado = true;
-						Rango_DN_Est_CMIN = 12.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_AT_Est_CMIN = 7.5;
-						Rango_AT_Est_CMAX = 47.5;
-						break;
-					case "T5z3_Gro":/* Especial */
-						resultado = true;
-						Rango_DN_Est_CMIN = 12.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_AT_Est_CMIN = 7.5;
-						Rango_AT_Est_CMAX = 47.5;
-						break;
-					case "T1z1_Gro":/* Especial */
-						resultado = true;
-						Rango_DN_Est_CMIN = 12.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_AT_Est_CMIN = 7.5;
-						Rango_AT_Est_CMAX = 47.5;
-						break;
+						switch (CVE_ECUACION) {
+						case "Oyamelz2y3_Ver":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 97.5;
+							Rango_DN_Est_CMIN = 12.5;
+							break;
+						case "Pinoz2y3_Ver":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 97.5;
+							Rango_DN_Est_CMIN = 12.5;
+							break;
+						case "T0z1_Pue":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T0z1_SLP":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T0z3_Hgo":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T1_Chis":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T6z4_Gro":/* Especial */
+							resultado = true;
+							Rango_DN_Est_CMIN = 12.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_AT_Est_CMIN = 7.5;
+							Rango_AT_Est_CMAX = 47.5;
+							break;
+						case "T9z5_Gro":/* Especial */
+							resultado = true;
+							Rango_DN_Est_CMIN = 12.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_AT_Est_CMIN = 7.5;
+							Rango_AT_Est_CMAX = 47.5;
+							break;
+						case "T12_Gro":/* Especial */
+							resultado = true;
+							Rango_DN_Est_CMIN = 12.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_AT_Est_CMIN = 7.5;
+							Rango_AT_Est_CMAX = 47.5;
+							break;
+						case "T10z5_Gro":/* Especial */
+							resultado = true;
+							Rango_DN_Est_CMIN = 12.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_AT_Est_CMIN = 7.5;
+							Rango_AT_Est_CMAX = 47.5;
+							break;
+						case "T3z2_Gro":/* Especial */
+							resultado = true;
+							Rango_DN_Est_CMIN = 12.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_AT_Est_CMIN = 7.5;
+							Rango_AT_Est_CMAX = 47.5;
+							break;
+						case "T2z2_Gro":/* Especial */
+							resultado = true;
+							Rango_DN_Est_CMIN = 12.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_AT_Est_CMIN = 7.5;
+							Rango_AT_Est_CMAX = 47.5;
+							break;
+						case "T4z3_Gro":/* Especial */
+							resultado = true;
+							Rango_DN_Est_CMIN = 12.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_AT_Est_CMIN = 7.5;
+							Rango_AT_Est_CMAX = 47.5;
+							break;
+						case "T5z3_Gro":/* Especial */
+							resultado = true;
+							Rango_DN_Est_CMIN = 12.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_AT_Est_CMIN = 7.5;
+							Rango_AT_Est_CMAX = 47.5;
+							break;
+						case "T1z1_Gro":/* Especial */
+							resultado = true;
+							Rango_DN_Est_CMIN = 12.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_AT_Est_CMIN = 7.5;
+							Rango_AT_Est_CMAX = 47.5;
+							break;
 
-					case "T10_Chis":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T10z4_Mex":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T11_Chis":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T11_Gro":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 12.5;
-						break;
-					case "T11_Mex":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T12_Chis":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T12_Mex":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T12_QR":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T13_Chis":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T13_QR":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T14_Chis":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T14_QR":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T15_Chis":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T15_QR":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T16_Chis":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T16_QR":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T1z1_Mex":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T1z1_Tlax":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T2_Chis":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T2_QR":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T2z1_Mex":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T2z2_Tlax":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T3_Chis":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T3_QR":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T3z2_Mex":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T3z3_Tlax":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T4_Chis":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T4_QR":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T4z2_Mex":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T4z3_Tlax":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T5_Chis":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T5_QR":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T5z2_Mex":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T6_Chis":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T6_QR":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T6z3_Mex":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T7_Chis":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T7_QR":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T7z3_Mex":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T8_Chis":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T8_QR":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T8z4_Mex":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T9_Chis":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T9_QR":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "T9z4_Mex":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TA_Hgo":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TA_NL":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TA_Qro":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TA_Tam":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TA1_Oax":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TA1z3_Chis":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TA2_Oax":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TA2z2_Chis":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TAz2_SLP":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TAz2y3_Pue":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TB_Coah":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TB_Hgo":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TB_NL":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TB_Oax":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TB_Qro":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TB_Tam":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TB1_Oax":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TB1z2y3_Chis":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TB2_Oax":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TB2z2y3_Chis":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TB3_Oax":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TB3z2_Chis":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TB4_Oax":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TB5_Oax":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TB6_Oax":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TB7_Oax":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TBz2_SLP":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TBz2y3_Pue":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TC_Coah":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TC_Gto":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TC_Hgo":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TC_NL":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TC_Qro":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TC_Tam":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TCz2_SLP":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TD_Coah":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TD_Gto":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TD_NL":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TD_Qro":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TDz2_SLP":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TE_Hgo":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TE_NL":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TE_Qro":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TG_Gto":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TG_Oax":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TG_Qro":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TG_Tab":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TGz1_Pue":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TGz1y2_Hgo":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TGz2_Chis":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TGz2_SLP":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TGz2y3_Pue":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TGz3_Hgo":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TH_Qro":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "THz2y3_Pue":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TI_Cam":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TI_Hgo":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TI_Tab":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TI_Ver":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TII_Cam":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "Tii_Hgo":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TII_Tab":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TII_Ver":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TIII_Cam":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TIII_Tab":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TIIz1_Pue":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TIV_Cam":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TIV_Oax":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
+						case "T10_Chis":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T10z4_Mex":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T11_Chis":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T11_Gro":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 12.5;
+							break;
+						case "T11_Mex":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T12_Chis":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T12_Mex":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T12_QR":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T13_Chis":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T13_QR":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T14_Chis":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T14_QR":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T15_Chis":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T15_QR":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T16_Chis":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T16_QR":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T1z1_Mex":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T1z1_Tlax":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T2_Chis":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T2_QR":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T2z1_Mex":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T2z2_Tlax":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T3_Chis":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T3_QR":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T3z2_Mex":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T3z3_Tlax":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T4_Chis":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T4_QR":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T4z2_Mex":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T4z3_Tlax":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T5_Chis":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T5_QR":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T5z2_Mex":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T6_Chis":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T6_QR":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T6z3_Mex":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T7_Chis":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T7_QR":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T7z3_Mex":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T8_Chis":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T8_QR":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T8z4_Mex":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T9_Chis":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T9_QR":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "T9z4_Mex":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TA_Hgo":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TA_NL":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TA_Qro":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TA_Tam":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TA1_Oax":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TA1z3_Chis":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TA2_Oax":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TA2z2_Chis":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TAz2_SLP":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TAz2y3_Pue":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TB_Coah":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TB_Hgo":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TB_NL":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TB_Oax":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TB_Qro":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TB_Tam":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TB1_Oax":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TB1z2y3_Chis":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TB2_Oax":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TB2z2y3_Chis":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TB3_Oax":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TB3z2_Chis":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TB4_Oax":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TB5_Oax":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TB6_Oax":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TB7_Oax":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TBz2_SLP":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TBz2y3_Pue":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TC_Coah":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TC_Gto":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TC_Hgo":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TC_NL":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TC_Qro":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TC_Tam":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TCz2_SLP":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TD_Coah":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TD_Gto":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TD_NL":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TD_Qro":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TDz2_SLP":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TE_Hgo":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TE_NL":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TE_Qro":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TG_Gto":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TG_Oax":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TG_Qro":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TG_Tab":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TGz1_Pue":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TGz1y2_Hgo":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TGz2_Chis":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TGz2_SLP":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TGz2y3_Pue":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TGz3_Hgo":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TH_Qro":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "THz2y3_Pue":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TI_Cam":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TI_Hgo":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TI_Tab":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TI_Ver":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TII_Cam":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "Tii_Hgo":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TII_Tab":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TII_Ver":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TIII_Cam":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TIII_Tab":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TIIz1_Pue":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TIV_Cam":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TIV_Oax":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
 
-					case "TIV_Tab":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TIV_Ver":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TIX_Cam":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TIX_Tab":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TIX-S_Pue":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TIz2_Chis":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TIz2_SLP":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TPino_BC":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 12.5;
-						break;
-					case "TPino_Chih":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 7.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 12.5;
-						break;
-					case "TPino_Dgo":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 42.5;
-						Rango_AT_Est_CMIN = 7.5;
-						Rango_DN_Est_CMAX = 112.5;
-						Rango_DN_Est_CMIN = 12.5;
-						break;
-					case "TPino_Jal":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 42.5;
-						Rango_AT_Est_CMIN = 7.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 12.5;
-						break;
-					case "TPino_Sin":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 42.5;
-						Rango_AT_Est_CMIN = 7.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 12.5;
-						break;
-					case "TPino_Zac":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 42.5;
-						Rango_AT_Est_CMIN = 7.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 12.5;
-						break;
-					case "TPinoNay":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 42.5;
-						Rango_AT_Est_CMIN = 7.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 12.5;
-						break;
-					case "TQue_Jal":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 22.5;
-						Rango_AT_Est_CMIN = 7.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 12.5;
-						break;
-					case "TQue_Nay":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 22.5;
-						Rango_AT_Est_CMIN = 7.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 12.5;
-						break;
-					case "TV_Cam":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TV_Oax":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TV_Tab":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TVI_Cam":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TVI_Oax":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TVI_Tab":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TVI_Ver":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TVII_Cam":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TVII_Tab":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TVII_Ver":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TVIII_Cam":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TVIII_Tab":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TVIII_Ver":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "Tvol1_QR":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "Tvol10_QR":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "Tvol11_QR":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TX_Cam":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TX_Hgo":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TX_Tab":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TXI_Cam":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TXI_Tab":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TXII_cam":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TXII_Tab":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TXII_Ver":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TXIII_Cam":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TXIII_Tab":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TXIV_Oax":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TXV_Ver":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TXVI_Ver":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
-					case "TXVIz1_Pue":/* Especial */
-						resultado = true;
-						Rango_AT_Est_CMAX = 47.5;
-						Rango_AT_Est_CMIN = 2.5;
-						Rango_DN_Est_CMAX = 132.5;
-						Rango_DN_Est_CMIN = 7.5;
-						break;
+						case "TIV_Tab":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TIV_Ver":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TIX_Cam":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TIX_Tab":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TIX-S_Pue":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TIz2_Chis":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TIz2_SLP":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TPino_BC":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 12.5;
+							break;
+						case "TPino_Chih":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 7.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 12.5;
+							break;
+						case "TPino_Dgo":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 42.5;
+							Rango_AT_Est_CMIN = 7.5;
+							Rango_DN_Est_CMAX = 112.5;
+							Rango_DN_Est_CMIN = 12.5;
+							break;
+						case "TPino_Jal":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 42.5;
+							Rango_AT_Est_CMIN = 7.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 12.5;
+							break;
+						case "TPino_Sin":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 42.5;
+							Rango_AT_Est_CMIN = 7.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 12.5;
+							break;
+						case "TPino_Zac":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 42.5;
+							Rango_AT_Est_CMIN = 7.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 12.5;
+							break;
+						case "TPinoNay":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 42.5;
+							Rango_AT_Est_CMIN = 7.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 12.5;
+							break;
+						case "TQue_Jal":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 22.5;
+							Rango_AT_Est_CMIN = 7.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 12.5;
+							break;
+						case "TQue_Nay":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 22.5;
+							Rango_AT_Est_CMIN = 7.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 12.5;
+							break;
+						case "TV_Cam":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TV_Oax":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TV_Tab":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TVI_Cam":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TVI_Oax":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TVI_Tab":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TVI_Ver":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TVII_Cam":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TVII_Tab":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TVII_Ver":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TVIII_Cam":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TVIII_Tab":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TVIII_Ver":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "Tvol1_QR":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "Tvol10_QR":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "Tvol11_QR":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TX_Cam":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TX_Hgo":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TX_Tab":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TXI_Cam":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TXI_Tab":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TXII_cam":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TXII_Tab":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TXII_Ver":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TXIII_Cam":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TXIII_Tab":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TXIV_Oax":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TXV_Ver":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TXVI_Ver":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
+						case "TXVIz1_Pue":/* Especial */
+							resultado = true;
+							Rango_AT_Est_CMAX = 47.5;
+							Rango_AT_Est_CMIN = 2.5;
+							Rango_DN_Est_CMAX = 132.5;
+							Rango_DN_Est_CMIN = 7.5;
+							break;
 
-					default:
-						resultado = false;
-						iteradorNoFormulaRango++;
-						break;
-					}
-
-					if (resultado == true) {// si tiene rango
-						if (AT_Est_C >= Rango_AT_Est_CMIN && AT_Est_C <= Rango_AT_Est_CMAX
-								&& DN_Est_C <= Rango_DN_Est_CMAX && DN_Est_C >= Rango_DN_Est_CMIN) {
-							RESULTADO = calculoVolumen(CVE_ECUACION, DN_Est_C, AT_Est_C);
-							iteradorDentroRangos++;
-						} else {
-							RESULTADO = 0.7854 * Math.pow(DN_Est_C / 100, 2) * AT_Est_C * 0.3;
-							CVE_ECUACION = "Coef_Morf_03";
-							Prioridad_Arbol="60";
-							iteradorFueraRangos++;
+						default:
+							resultado = false;
+							iteradorNoFormulaRango++;
+							break;
 						}
-					}
-					if (resultado == false) {
-						RESULTADO = calculoVolumen(CVE_ECUACION, DN_Est_C, AT_Est_C);
-					}
 
-					if (Integer.parseInt(Prioridad_Arbol) >= 1 && Integer.parseInt(Prioridad_Arbol) <= 4) {
-						Nivel = "1";
-					}
+						if (resultado == true) {// si tiene rango
+							if (AT_Est_C >= Rango_AT_Est_CMIN && AT_Est_C <= Rango_AT_Est_CMAX
+									&& DN_Est_C <= Rango_DN_Est_CMAX && DN_Est_C >= Rango_DN_Est_CMIN) {
+								RESULTADO = calculoVolumen(CVE_ECUACION, DN_Est_C, AT_Est_C);
+								iteradorDentroRangos++;
+							} else {
+								RESULTADO = 0.7854 * Math.pow(DN_Est_C / 100, 2) * AT_Est_C * 0.3;
+								CVE_ECUACION = "Coef_Morf_03";
+								Prioridad_Arbol = "60";
+								iteradorFueraRangos++;
+							}
+						}
+						if (resultado == false) {
+							RESULTADO = calculoVolumen(CVE_ECUACION, DN_Est_C, AT_Est_C);
+						}
 
-					if (Integer.parseInt(Prioridad_Arbol) >= 5 && Integer.parseInt(Prioridad_Arbol) <= 12) {
-						Nivel = "2";
-					}
+						if (Integer.parseInt(Prioridad_Arbol) >= 1 && Integer.parseInt(Prioridad_Arbol) <= 4) {
+							Nivel = "1";
+						}
 
-					if (Integer.parseInt(Prioridad_Arbol) >= 13 && Integer.parseInt(Prioridad_Arbol) <= 16) {
-						Nivel = "3";
-					}
+						if (Integer.parseInt(Prioridad_Arbol) >= 5 && Integer.parseInt(Prioridad_Arbol) <= 12) {
+							Nivel = "2";
+						}
 
-					if (Integer.parseInt(Prioridad_Arbol) >= 17 && Integer.parseInt(Prioridad_Arbol) <= 24) {
-						Nivel = "4";
-					}
+						if (Integer.parseInt(Prioridad_Arbol) >= 13 && Integer.parseInt(Prioridad_Arbol) <= 16) {
+							Nivel = "3";
+						}
 
-					if (Integer.parseInt(Prioridad_Arbol) >= 25 && Integer.parseInt(Prioridad_Arbol) <= 28) {
-						Nivel = "5";
-					}
+						if (Integer.parseInt(Prioridad_Arbol) >= 17 && Integer.parseInt(Prioridad_Arbol) <= 24) {
+							Nivel = "4";
+						}
 
-					if (Integer.parseInt(Prioridad_Arbol) >= 29 && Integer.parseInt(Prioridad_Arbol) <= 36) {
-						Nivel = "6";
-					}
+						if (Integer.parseInt(Prioridad_Arbol) >= 25 && Integer.parseInt(Prioridad_Arbol) <= 28) {
+							Nivel = "5";
+						}
 
-					if (Integer.parseInt(Prioridad_Arbol) >= 37 && Integer.parseInt(Prioridad_Arbol) <= 39) {
-						Nivel = "7";
-					}
+						if (Integer.parseInt(Prioridad_Arbol) >= 29 && Integer.parseInt(Prioridad_Arbol) <= 36) {
+							Nivel = "6";
+						}
 
-					if (Integer.parseInt(Prioridad_Arbol) >= 40 && Integer.parseInt(Prioridad_Arbol) <= 47) {
-						Nivel = "8";
-					}
+						if (Integer.parseInt(Prioridad_Arbol) >= 37 && Integer.parseInt(Prioridad_Arbol) <= 39) {
+							Nivel = "7";
+						}
 
-					if (Integer.parseInt(Prioridad_Arbol) >= 48 && Integer.parseInt(Prioridad_Arbol) <= 50) {
-						Nivel = "9";
-					}
+						if (Integer.parseInt(Prioridad_Arbol) >= 40 && Integer.parseInt(Prioridad_Arbol) <= 47) {
+							Nivel = "8";
+						}
 
-					if (Integer.parseInt(Prioridad_Arbol) >= 51 && Integer.parseInt(Prioridad_Arbol) <= 58) {
-						Nivel = "10";
-					}
+						if (Integer.parseInt(Prioridad_Arbol) >= 48 && Integer.parseInt(Prioridad_Arbol) <= 50) {
+							Nivel = "9";
+						}
 
-					if (Integer.parseInt(Prioridad_Arbol) == 59) {
-						Nivel = "11";
-					}
+						if (Integer.parseInt(Prioridad_Arbol) >= 51 && Integer.parseInt(Prioridad_Arbol) <= 58) {
+							Nivel = "10";
+						}
 
-					if (Integer.parseInt(Prioridad_Arbol) == 60) {
-						Nivel = "12";
-					}
+						if (Integer.parseInt(Prioridad_Arbol) == 59) {
+							Nivel = "11";
+						}
 
-					if (Rango_AT_Est_CMAX == 0) {
-						Rango_AT_Est_CMAX_String = "NULL";
-					} else {
-						Rango_AT_Est_CMAX_String = Double.toString(Rango_AT_Est_CMAX);
-					}
-					if (Rango_AT_Est_CMIN == 0) {
-						Rango_AT_Est_CMIN_String = "NULL";
-					} else {
-						Rango_AT_Est_CMIN_String = Double.toString(Rango_AT_Est_CMIN);
-					}
-					if (Rango_DN_Est_CMAX == 0) {
-						Rango_DN_Est_CMAX_String = "NULL";
-					} else {
-						Rango_DN_Est_CMAX_String = Double.toString(Rango_DN_Est_CMAX);
-					}
-					if (Rango_DN_Est_CMIN == 0) {
-						Rango_DN_Est_CMIN_String = "NULL";
-					} else {
-						Rango_DN_Est_CMIN_String = Double.toString(Rango_DN_Est_CMIN);
-					}
+						if (Integer.parseInt(Prioridad_Arbol) == 60) {
+							Nivel = "12";
+						}
 
-					ecuacion=getEcuacion(CVE_ECUACION);
+						if (Rango_AT_Est_CMAX == 0) {
+							Rango_Alt = "NULL";
+						}
 
-					wr.append(Conglomerado + "," + cgl_sit_arb + "," + Anio + "," + IdEstado + "," + Estado + ","
-							+ Formato + "," + Sitio + "," + Registro + "," + Arbol + "," + Familia_APG + ","
-							+ Genero_APG + "," + Especie_APG + "," + Categoria_Infra_APG + "," + Infra_APG + ","
-							+ Condicion + "," + Forma_Biologica_1 + "," + NombreCientifico_APG + "," + AT_Est_C + ","
-							+ DN_Est_C + "," + CVE_ECUACION + "," + ecuacion + "," + Rango_DN_Est_CMIN_String + ","
-							+ Rango_DN_Est_CMAX_String + "," + Rango_AT_Est_CMIN_String + "," + Rango_AT_Est_CMAX_String
-							+ "," + fuente + "," + Prioridad_Arbol + "," + Nivel + "," + RESULTADO + "\n");
+						if (Rango_DN_Est_CMAX == 0) {
+							Rango_Diam = "NULL";
+						}
 
-					Rango_AT_Est_CMAX = 0;
-					Rango_AT_Est_CMIN = 0;
-					Rango_DN_Est_CMAX = 0;
-					Rango_DN_Est_CMIN = 0;
-					resultado = false;
-					CVE_ECUACION = "";
+						ecuacion = getEcuacion(CVE_ECUACION);
 
-					numeroRegistros.setText("Numero de registros calculados: " + i);
+						wr.append(Conglomerado + "," + cgl_sit_arb + "," + Anio + "," + IdEstado + "," + Estado + ","
+								+ Formato + "," + Sitio + "," + Registro + "," + Arbol + "," + Familia_APG + ","
+								+ Genero_APG + "," + Especie_APG + "," + Categoria_Infra_APG + "," + Infra_APG + ","
+								+ Condicion + "," + Forma_Biologica_1 + "," + NombreCientifico_APG + "," + AT_Est_C
+								+ "," + DN_Est_C + "," + CVE_ECUACION + "," + ecuacion + "," + fuente + "," + Rango_Alt
+								+ "," + Rango_Diam + "," + Prioridad_Arbol + "," + Nivel + "," + RESULTADO + ","
+								+ "\n");
+
+						Rango_AT_Est_CMAX = 0;
+						Rango_AT_Est_CMIN = 0;
+						Rango_DN_Est_CMAX = 0;
+						Rango_DN_Est_CMIN = 0;
+						resultado = false;
+						CVE_ECUACION = "";
+						
+						numeroRegistros.setText("Numero de registros calculados: " + registros);
+					}
+					// Cerramos el archivo
 				}
-				// Cerramos el archivo
 
 			}
 			txtDentroRango.setText(Integer.toString(iteradorDentroRangos));
