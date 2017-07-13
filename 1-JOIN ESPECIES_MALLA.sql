@@ -1,17 +1,23 @@
-SELECT 
-  umafores.[IdConglome] AS 'Conglomerado'
-  ,umafores.[CVE_ENT] AS 'IdEstado'
-  ,umafores.[CVE_UMAF_E] as 'Clave_UMAFOR'
-  /*    ,especies_por_cgl.[Estado]*/      
-  ,especies_por_cgl.[Familia_APG] AS 'Familia_APG'
-  ,especies_por_cgl.[Genero_APG] AS 'Genero_APG'
-  ,especies_por_cgl.[Especie_APG] AS 'Especie_APG'
-  ,especies_por_cgl.[Categoria_Infra_APG] AS 'Categoria_Infra_APG'
-  ,especies_por_cgl.[Infra_APG] AS 'Infra_APG'
-  ,especies_por_cgl.[NombreCientifico_APG] AS 'NombreCientifico_APG'
-  ,umafores.[CVEECON1] as 'Eco_N1'
-  ,umafores.[CVEECON2] as 'Eco_N2'
-  ,umafores.[CVEECON3] as 'Eco_N3'
-  ,umafores.[CVEECON4] as 'Eco_N4'
-FROM [UMAFORES_CGL_2017].[dbo].[UMAFORES_UPMS] umafores 
-JOIN [UMAFORES_CGL_2017].[dbo].[Especies_por_cgl] especies_por_cgl ON especies_por_cgl.[Conglomerado]= umafores.[IdConglome]
+/****** Script for SelectTopNRows command from SSMS  ******/
+SELECT DISTINCT
+ecoRegiones.[IdConglome]
+,especiesXcgl.[IdEstado]
+,especiesXcgl.[Estado]
+,especiesXcgl.[Familia_APG]  AS 'Familia_APG'
+,especiesXcgl.[Genero_APG]  AS 'Genero_APG'
+,especiesXcgl.[Especie_APG]  AS 'Especie_APG'
+,especiesXcgl.[Categoria_Infra_APG]  AS 'Categoria_Infra_APG'
+,especiesXcgl.[Infra_APG]  AS 'Infra_APG'
+,especiesXcgl.[NombreCientifico_APG]  AS 'NombreCientifico_APG'
+--::::::::::::::::::::::::::::::::::::::::::::::
+,ecoRegiones.[CVE_UMAF_E] as Clave_UMAFOR
+,ecoRegiones.[CVEECON1] as Eco_N1
+,ecoRegiones.[CVEECON2] as Eco_N2
+,ecoRegiones.[CVEECON3] as Eco_N3
+,ecoRegiones.[CVEECON4] as Eco_N4
+
+FROM [Taxodium].[dbo].[Especies_X_Conglomerado_muestreo] especiesXcgl
+JOIN [Taxodium].[dbo].[UMAF_Ecorregiones_muestreo] ecoRegiones ON (ecoRegiones.[IdConglome] = especiesXcgl.[IdConglomerado])
+WHERE Sitio=1
+ORDER BY
+IdConglome
