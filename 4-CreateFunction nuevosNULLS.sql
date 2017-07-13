@@ -13,6 +13,7 @@ ALTER FUNCTION udfAsignacionEcuacion
  ,@Eco_N3 nvarchar(255)
  ,@Eco_N2 float
  ,@Eco_N1 int
+ 
 
 
 ) 
@@ -23,7 +24,8 @@ RETURNS @ArboladoEcuaciones TABLE --retorna una variable tipo tabla
           CveEcuacion nvarchar(255)
          ,Num_Observaciones int
          ,R2 float
-  ,Prioridad_Arbol nvarchar(10)
+        ,Prioridad_Arbol nvarchar(10)
+        ,Fuente nvarchar(255)
 )
 
 AS
@@ -113,6 +115,7 @@ BEGIN
         WHEN [Eco_N1]=@Eco_N1 AND [Familia_APG] IS NULL  AND [Genero_APG] IS NULL AND [Especie_APG] IS NULL AND [Fuente]='1erINF61-85'   THEN  58
         /**/
         end) as 'Prioridad_Arbol'
+        ,[Fuente]
 --
 FROM 
 [ArbolDesiciones].[dbo].[Ecuaciones_VRTA_2]

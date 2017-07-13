@@ -1,6 +1,7 @@
 /****** Script for SelectTopNRows command from SSMS  ******/
 SELECT DISTINCT
 ecoRegiones.[IdConglome]
+,especiesXcgl.Anio
 ,especiesXcgl.[IdEstado]
 ,especiesXcgl.[Estado]
 ,especiesXcgl.[Familia_APG]  AS 'Familia_APG'
