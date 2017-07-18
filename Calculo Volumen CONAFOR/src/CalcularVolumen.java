@@ -120,7 +120,7 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 						Rango_Diam = tokensaux.nextToken();
 						Prioridad_Arbol = tokensaux.nextToken();
 						/* REVISAR SI ES UNA ECUACION CON RANGOS */
-
+						
 						switch (CVE_ECUACION) {
 						case "Oyamelz2y3_Ver":/* Especial */
 							resultado = true;
@@ -1347,8 +1347,13 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 							resultado = false;
 							iteradorNoFormulaRango++;
 							break;
+							
 						}
-
+						
+						if(CVE_ECUACION.equals("NULL")) {
+							CVE_ECUACION = "Coef_Morf_03";
+						}
+						
 						if (resultado == true) {// si tiene rango
 							if (AT_Est_C >= Rango_AT_Est_CMIN && AT_Est_C <= Rango_AT_Est_CMAX
 									&& DN_Est_C <= Rango_DN_Est_CMAX && DN_Est_C >= Rango_DN_Est_CMIN) {
@@ -1420,7 +1425,9 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 						if (Rango_DN_Est_CMAX == 0) {
 							Rango_Diam = "NULL";
 						}
-
+						
+						
+						
 						ecuacion = getEcuacion(CVE_ECUACION);
 
 						wr.append(Conglomerado + "," + cgl_sit_arb + "," + Anio + "," + IdEstado + "," + Estado + ","
