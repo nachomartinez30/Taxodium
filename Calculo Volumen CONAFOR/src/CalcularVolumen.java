@@ -1279,7 +1279,7 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 							Rango_DN_Est_CMAX = 132.5;
 							Rango_DN_Est_CMIN = 7.5;
 							break;
-						case "TXII_cam":/* Especial */
+						case "TXII_Cam":/* Especial */
 							resultado = true;
 							Rango_AT_Est_CMAX = 47.5;
 							Rango_AT_Est_CMIN = 2.5;
@@ -4713,7 +4713,7 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 		case "TXI_Tab":
 			res = Math.exp(-9.96832495 + 1.89779841 * Math.log(DN_EC) + 1.08188905 * Math.log(AT_EC));
 			break;
-		case "TXII_cam":
+		case "TXII_Cam":
 			res = Math.exp(-9.83322527 + 1.92412457 * Math.log(DN_EC) + 1.00970142 * Math.log(AT_EC));
 			break;
 		case "TXII_Tab":
@@ -7992,7 +7992,7 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 		case "TXI_Tab":
 			ecuacion = " EXP(-9.96832495 + 1.89779841 * LN(DN_EC) + 1.08188905 * LN(AT_EC))";
 			break;
-		case "TXII_cam":
+		case "TXII_Cam":
 			ecuacion = " EXP(-9.83322527 + 1.92412457 * LN(DN_EC) + 1.00970142 * LN(AT_EC))";
 			break;
 		case "TXII_Tab":
@@ -8020,7 +8020,7 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 			ecuacion = " EXP(-9.40152632 + 1.71919595 * LN(DN_EC) + 1.07447205 * LN(AT_EC))";
 			break;
 		default:
-			ecuacion = " 0.00000000000000000000000000000000000000000000000000000000000000000000000000000000009";
+			ecuacion = "0.00000000000000000000000000000000000000000000000000000000000000000000000000000000009";
 			break;
 		}
 		return ecuacion;
