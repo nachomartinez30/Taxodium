@@ -59,7 +59,7 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 	}
 
 	public void recoleccionDatos(String ruta) {
-		int i = 0,registros=0;
+		int i = 0, registros = 0;
 		double AT_Est_C = 0, DN_Est_C = 0;
 		DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd");
 		Calendar cal = Calendar.getInstance();
@@ -120,7 +120,13 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 						Rango_Diam = tokensaux.nextToken();
 						Prioridad_Arbol = tokensaux.nextToken();
 						/* REVISAR SI ES UNA ECUACION CON RANGOS */
-						
+						System.out.println("linea" + Conglomerado + "," + cgl_sit_arb + "," + Anio + "," + IdEstado
+								+ "," + Estado + "," + Formato + "," + Sitio + "," + Registro + "," + Arbol + ","
+								+ Familia_APG + "," + Genero_APG + "," + Especie_APG + "," + Categoria_Infra_APG + ","
+								+ Infra_APG + "," + Condicion + "," + Forma_Biologica_1 + "," + NombreCientifico_APG
+								+ "," + AT_Est_C + "," + DN_Est_C + "," + CVE_ECUACION + "," + ecuacion + "," + fuente
+								+ "," + Rango_Alt + "," + Rango_Diam + "," + Prioridad_Arbol + "," + Nivel + ","
+								+ RESULTADO + "," + "\n");
 						switch (CVE_ECUACION) {
 						case "Oyamelz2y3_Ver":/* Especial */
 							resultado = true;
@@ -1347,13 +1353,16 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 							resultado = false;
 							iteradorNoFormulaRango++;
 							break;
-							
+
 						}
-						
-						if(CVE_ECUACION.equals("NULL")) {
+
+						if (CVE_ECUACION.equals("NULL")) {
 							CVE_ECUACION = "Coef_Morf_03";
 						}
-						
+						if (Prioridad_Arbol.equals("NULL")) {
+							Prioridad_Arbol = "58";
+						}
+
 						if (resultado == true) {// si tiene rango
 							if (AT_Est_C >= Rango_AT_Est_CMIN && AT_Est_C <= Rango_AT_Est_CMAX
 									&& DN_Est_C <= Rango_DN_Est_CMAX && DN_Est_C >= Rango_DN_Est_CMIN) {
@@ -1362,8 +1371,8 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 							} else {
 								RESULTADO = 0.7854 * Math.pow(DN_Est_C / 100, 2) * AT_Est_C * 0.3;
 								CVE_ECUACION = "Coef_Morf_03";
-								Rango_Alt="NULL";
-								Rango_Diam="NULL";
+								Rango_Alt = "NULL";
+								Rango_Diam = "NULL";
 								Prioridad_Arbol = "60";
 								iteradorFueraRangos++;
 							}
@@ -1420,16 +1429,15 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 							Nivel = "12";
 						}
 
-						if (Rango_AT_Est_CMAX == 0) {
-							Rango_Alt = "NULL";
-						}
+						// if (Rango_AT_Est_CMAX == 0) {
+						// Rango_Alt = "NULL";
+						// }
+						//
+						// if (Rango_DN_Est_CMAX == 0) {
+						// Rango_Diam = "NULL";
+						// }
+						//
 
-						if (Rango_DN_Est_CMAX == 0) {
-							Rango_Diam = "NULL";
-						}
-						
-						
-						
 						ecuacion = getEcuacion(CVE_ECUACION);
 
 						wr.append(Conglomerado + "," + cgl_sit_arb + "," + Anio + "," + IdEstado + "," + Estado + ","
@@ -1446,7 +1454,7 @@ public class CalcularVolumen extends SwingWorker<Integer, String> {
 						Rango_DN_Est_CMIN = 0;
 						resultado = false;
 						CVE_ECUACION = "";
-						
+
 						numeroRegistros.setText("Numero de registros calculados: " + registros);
 					}
 					// Cerramos el archivo

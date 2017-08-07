@@ -70,7 +70,7 @@ public class Index extends JFrame {
 	public Index() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Index.class.getResource("/image/image_index.png")));
 		setResizable(false);
-		setTitle("Calculo volumen (v_1.2)");
+		setTitle("Calculo volumen (v_1.3)");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 482, 470);
 		contentPane = new JPanel();
